@@ -17,6 +17,8 @@ df = pd.read_csv(csv_path)
 df = df.sort_values(column_name)
 # get conditions column
 column_data = df[column_name].astype(str)
+
+#region Cleaning
 # remove string after comma, hyphen, semicolon or " - " on each row
 column_data_cleaned = column_data.str.replace(r'[,;].*| - .*', '', regex=True)
 # remove punctuation left over
@@ -30,8 +32,10 @@ pattern_with = r'\b{}\b'.format(re.escape('with'))
 column_data_cleaned = column_data_cleaned.str.replace(pattern_with, '', regex=True)
 # set text to lower
 column_data_cleaned = column_data_cleaned.str.lower()
+#endregion
+
 # cast as string without index or header
-column_data_str = column_data_cleaned.to_string(index=False, header=False)
+column_data_str = column_data_cleaned.to_string(index=False)
 # remove leading whitespace
 column_data_str = '\n'.join(row.strip() for row in column_data_str.split('\n'))
 # split lines with multiple data points by "|"
