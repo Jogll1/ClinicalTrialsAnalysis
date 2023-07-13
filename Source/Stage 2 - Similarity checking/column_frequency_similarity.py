@@ -5,14 +5,11 @@ from difflib import SequenceMatcher
 pd.options.display.max_colwidth = 1000
 similarity_threshold = 0.6
 
-# read the text file
-# with open('conditions.txt', 'r', encoding='utf-8') as f:
-#     lines = f.readlines()
+data_path = 'conditions.txt'
+invalid_rows = ['nan', '#NAME?']
 
 # calcualte the similarity between two strings using SequenceMatcher
 def similarity_score(a, b):
     return SequenceMatcher(None, a, b).ratio()
-
-print(similarity_score('Cough', 'Cough Variant Asthma'))
 
 

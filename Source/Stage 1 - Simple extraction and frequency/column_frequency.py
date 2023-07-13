@@ -16,7 +16,7 @@ with open(data_path, 'r', encoding='utf-8') as f:
 # create a dataframe from the dictionary
 df = pd.DataFrame(list(rows_frequency.items()), columns=['Condition', 'Frequency'])
 
-# sort the dataframe by frequency
+# sort the dataframe
 # sorted_df = df.sort_values(by='Condition', ascending=True)
 sorted_df = df.sort_values(by='Frequency', ascending=False)
 # filter the top n most frequent

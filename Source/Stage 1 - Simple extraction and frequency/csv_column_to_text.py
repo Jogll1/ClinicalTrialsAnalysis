@@ -1,5 +1,6 @@
 # in analyse the conditions column, extract the data from the column
 import pandas as pd
+import re
 
 pd.options.display.max_colwidth = 1000
 
@@ -20,14 +21,19 @@ column_data = df[column_name].astype(str)
 column_data_cleaned = column_data.str.replace(r'[,;].*| - .*', '', regex=True)
 # remove punctuation left over
 column_data_cleaned = column_data_cleaned.str.replace(r'[^\w\s]', '', regex=True)
+#remove stopwords
+stopwords = ['and', 'the', 'in', 'to', 'by', 'due', 'for', 'his', 'of', 'use', 'at', 'all', 'old', 'more', 'than', 'with']
+pattern = r'\b(?:{})\b'.format('|'.join(stopwords))
+column_data_cleaned = column_data_cleaned.str.replace(pattern, '', regex=True)
+#remove with
+pattern_with = r'\b{}\b'.format(re.escape('with'))
+column_data_cleaned = column_data_cleaned.str.replace(pattern_with, '', regex=True)
 # set text to lower
 column_data_cleaned = column_data_cleaned.str.lower()
 # cast as string without index or header
 column_data_str = column_data_cleaned.to_string(index=False, header=False)
 # remove leading whitespace
 column_data_str = '\n'.join(row.strip() for row in column_data_str.split('\n'))
-#remove stopwords
-stopwords = ['and', 'the', 'in', 'to', 'by', 'due', 'for', 'his', 'of', 'use', '']
 # split lines with multiple data points by "|"
 split_rows = [row.split("|") for row in column_data_str.split('\n')]
 # flatten split data into a string with newline chars
