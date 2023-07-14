@@ -14,7 +14,7 @@ cond_freq_path = 'conditions_frequency.csv'
 # get the frequency of each condition and add it to the overall frequency of that medical specialisation
 # then create a csv file with that data
 
-# strip lines
+# idk (strip lines?)
 values_added = []
 with open(input_path, 'r', encoding='utf-8') as f_in, open(new_med_spec_path, 'w', encoding='utf-8') as f_out:
     for line in f_in:
