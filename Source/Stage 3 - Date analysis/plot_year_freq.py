@@ -1,4 +1,5 @@
 import pandas as pd
+import json
 
 # overview
 # gather a list of all conditions:year ('condition_with_year.txt')
@@ -13,6 +14,7 @@ map_cond_path = 'mapped_conditions.txt'
 output_txt_path1 = 'condition_with_year.txt'
 output_txt_path2 = 'spec_with_year.txt'
 output_txt_path3 = 'spec_year_frequencies.csv'
+output_txt_path4 = 'spec_year_freq_dict.json'
 
 df = pd.read_csv(input_path)
 conditions_list = df["Conditions"].astype(str).to_list()
@@ -24,8 +26,8 @@ map_spec_list = [] # list of all specialities in mapped_condition
 print("Get unqiue conditions and specialisations")
 with open(map_cond_path, 'r', encoding='utf-8') as f:
     for line in f:
-        strip_line_cond = line.split(':')[0]
-        strip_line_spec = line.split(':')[1]
+        strip_line_cond = line.split(':')[0].lower()
+        strip_line_spec = line.split(':')[1].lower()
         if strip_line_cond not in map_cond_list:
             map_cond_list.append(strip_line_cond)
             map_spec_list.append(strip_line_spec)
@@ -38,19 +40,27 @@ with open(output_txt_path1, 'w', encoding='utf-8') as f_out:
         year = start_years_list[i][0:4]
         conditions = conditions_list[i].split('|')
         for i in range(0, len(conditions)):
-            f_out.write(conditions[i].strip('"') + ":" + year + '\n')
+            f_out.write(conditions[i].strip('"').split(':')[0].lower() + ":" + year + '\n')
 
 # check each condition and remove ones which aren't in mapped_conditions
-# then create new file and add the specialty paired with the year
+# then create new file and add the specialisation paired with the year
 print("Write to spec_with_year.txt")
 with open(output_txt_path1, "r", encoding='utf-8') as f_in, open(output_txt_path2, "w", encoding='utf-8') as f_out:
     for line in f_in:
         values = line.split(':')
-        cond = values[0]
+        cond = values[0].split(':')[0]
         year = values[1]
-        if values[0] in map_cond_list and year != 'nan\n':
+        if cond in map_cond_list and year != 'nan\n':
             spec = map_spec_list[map_cond_list.index(cond)].strip('\n')
-            f_out.write(spec + ":" + year)
+            # some specialisations are like spec1/spec2 so split at / and count them as 2 seperate
+            specs = spec.split('/')
+            if len(specs) > 1:
+                f_out.write(specs[0] + ":" + year)
+                f_out.write(specs[1] + ":" + year)
+            else:
+                # some also have (not listed) at the end so remove that
+                spec = spec.rstrip(' (not listed)')
+                f_out.write(spec + ":" + year)
 
 # now collect all repeated instances of speciality:year with freqeuncies
 spec_and_year_tokens = []
@@ -78,34 +88,33 @@ sorted_df.to_csv(output_txt_path3, index=False)
 
 # now generate a 2d array csv
 print("Write to nested dictionary object")
-# the nested dictionary should be like
-# data = {
-#   'oncology': {
-#       2019: 405,
-#       2020: 236,
-#       2021: 357
-#   },
-#   'cardiology': {
-#       2019: 564,
-#       2020: 345,
-#       2021: 235
-#   }
-# }
 data_for_plotting = {}
 
 # read the CSV file using pandas
-# df = pd.read_csv(output_txt_path3)
+df = pd.read_csv(output_txt_path3)
 
-# # iterate over each row in the dataframe
-# for index, row in df.iterrows():
-#     values = row['Specialisation-Year'].split(':')
-#     spec = values[0]
-#     year = values[1]
-#     frequency = int(row['Frequency'])
+# iterate over each row in the dataframe
+for index, row in df.iterrows():
+    values = row['Specialisation-Year'].split(':')
+    spec = values[0]
+    year = values[1]
+    frequency = int(row['Frequency'])
 
-#     if spec not in data_for_plotting:
-#         data_for_plotting[spec] = {}
+    if spec not in data_for_plotting:
+        data_for_plotting[spec] = {}
 
-#     data_for_plotting[spec][year] = frequency
+    data_for_plotting[spec][year] = frequency
 
-# print(data_for_plotting)
+def sort_dict(dictionary):
+    if isinstance(dictionary, dict):
+        sorted_dict = {}
+        for key in sorted(dictionary.keys()):
+            sorted_dict[key] = sort_dict(dictionary[key])
+        return sorted_dict
+    else:
+        return dictionary
+
+data_for_plotting = sort_dict(data_for_plotting)
+
+with open(output_txt_path4, 'w') as json_file:
+    json.dump(data_for_plotting, json_file, indent=4)
