@@ -2,7 +2,8 @@
 
 import pandas as pd
 
-data_path = 'conditions_uncleaned.txt'
+data_path = 'Data/Stage 1/conditions_uncleaned.txt'
+output_csv = 'Data/Stage 1/conditions_frequency.csv'
 invalid_rows = ['nan', '#NAME?']
 
 # read the text file and count row frequencies
@@ -23,4 +24,4 @@ sorted_df = df.sort_values(by='Frequency', ascending=False)
 # filtered_df = sorted_df.head(25)
 
 # write to csv
-sorted_df.to_csv('conditions_frequency.csv', index=False)
+sorted_df.to_csv(output_csv, index=False)

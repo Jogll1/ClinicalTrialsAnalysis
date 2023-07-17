@@ -4,7 +4,8 @@ from difflib import SequenceMatcher
 
 pd.options.display.max_colwidth = 1000
 
-data_path = 'conditions.txt'
+data_path = 'Data/Stage 1/conditions.txt'
+output_path = 'Data/Stage 2/words_frequency.csv'
 invalid_rows = ['nan', '#NAME?']
 
 # read the text file and create a new csv containing the frequency of each individual word
@@ -26,4 +27,4 @@ df = pd.DataFrame(list(words_frequency.items()), columns=['Word', 'Frequency'])
 sorted_df = df.sort_values(by='Frequency', ascending=False)
 
 # write to csv
-sorted_df.to_csv('words_frequency.csv', index=False, header=False)
+sorted_df.to_csv(output_path, index=False, header=False)

@@ -5,9 +5,9 @@ import re
 pd.options.display.max_colwidth = 1000
 
 # variables
-csv_path = 'ctg-studies1.csv'
+csv_path = 'Data/CTG csv/ctg-studies1.csv'
 column_name = 'Conditions'
-output_path = 'conditions.txt'
+output_path = 'Data/Stage 1/conditions.txt'
 
 # note - all rows with value 'nan' are withheld trials by the us gov
 

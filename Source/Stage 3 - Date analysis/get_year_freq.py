@@ -9,12 +9,12 @@ import json
 # then for each year count the amount of specialisations for that year
 
 # paths
-input_path = 'ctg-studies(dates).csv'
+input_path = 'Data/CTG csv/ctg-studies(dates).csv'
 map_cond_path = 'mapped_conditions.txt'
-output_txt_path1 = 'condition_with_year.txt'
-output_txt_path2 = 'spec_with_year.txt'
-output_txt_path3 = 'spec_year_frequencies.csv'
-output_txt_path4 = 'spec_year_freq_dict.json'
+output_txt_path1 = 'Data/Stage 3/condition_with_year.txt'
+output_txt_path2 = 'Data/Stage 3/spec_with_year.txt'
+output_csv_path1 = 'Data/Stage 3/spec_year_frequencies.csv'
+output_json_path1 = 'Data/Stage 3/spec_year_freq_dict.json'
 
 df = pd.read_csv(input_path)
 conditions_list = df["Conditions"].astype(str).to_list()
@@ -84,14 +84,14 @@ for i in range(0, len(spec_and_year_tokens)):
 print("Write to spec_year_frequencies.csv")
 df = pd.DataFrame({'Specialisation-Year': spec_and_year_tokens, 'Frequency': spec_and_year_frequency})
 sorted_df = df.sort_values('Frequency', ascending=False)
-sorted_df.to_csv(output_txt_path3, index=False)
+sorted_df.to_csv(output_csv_path1, index=False)
 
 # now generate a 2d array csv
 print("Write to nested dictionary object")
 data_for_plotting = {}
 
 # read the CSV file using pandas
-df = pd.read_csv(output_txt_path3)
+df = pd.read_csv(output_csv_path1)
 
 # iterate over each row in the dataframe
 for index, row in df.iterrows():
@@ -116,5 +116,5 @@ def sort_dict(dictionary):
 
 data_for_plotting = sort_dict(data_for_plotting)
 
-with open(output_txt_path4, 'w') as json_file:
+with open(output_json_path1, 'w') as json_file:
     json.dump(data_for_plotting, json_file, indent=4)

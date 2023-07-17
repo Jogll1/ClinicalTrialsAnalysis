@@ -2,11 +2,11 @@ import pandas as pd
 import numpy as np
 
 # variables
-input_path = 'mapped_conditions.txt'
-output_path = 'specialisation_frequency.csv'
+input_path = 'Data/Stage 2/mapped_conditions.txt'
+output_path = 'Data/Stage 2/specialisation_frequency.csv'
 
-new_med_spec_path = 'new_medical_specialisations.txt'
-cond_freq_path = 'conditions_frequency.csv'
+new_med_spec_path = 'Data/Stage 2/new_medical_specialisations.txt'
+cond_freq_path = 'Data/Stage 1/conditions_frequency.csv'
 
 # first strip the conditions so no quotation marks
 # then split each line of text file into condition and specialisation
