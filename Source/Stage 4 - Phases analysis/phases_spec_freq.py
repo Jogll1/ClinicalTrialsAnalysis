@@ -7,6 +7,7 @@ import json
 # if the condition is not in mapped_conditions just remove for now
 # this then means we can map the left over conditions to their specialisation and include the phase
 # then for each specialisation count the amount of different phases
+# (this is basically the same as get_year_freq.py)
 
 # paths
 input_path = 'Data/CTG csv/ctg-studies(phases).csv'
@@ -66,3 +67,60 @@ with open(output_txt_path1, "r", encoding='utf-8') as f_in, open(output_txt_path
                 # some also have (not listed) at the end so remove that
                 spec = spec.rstrip(' (not listed)')
                 f_out.write(spec + ":" + phase)
+
+# now collect all repeated instances of speciality:phase with freqeuncies
+spec_and_phase_tokens = []
+spec_and_phase_frequency = []
+print("Write lists for frequencies of spec and phase")
+with open(output_txt_path2, "r", encoding='utf-8') as f_in:
+    for line in f_in:
+        if line not in spec_and_phase_tokens:
+            spec_and_phase_tokens.append(line)
+            spec_and_phase_frequency.append(1)
+        else:
+            # increment the frequencies
+            spec_and_phase_frequency[spec_and_phase_tokens.index(line)] += 1
+
+# clean spec_and_phase_tokens
+print("Clean spec_and_phase_tokens")
+for i in range(0, len(spec_and_phase_tokens)):
+    spec_and_phase_tokens[i] = spec_and_phase_tokens[i].strip('"').strip('\n')
+
+# add these values to a csv
+print("Write to spec_phase_frequencies.csv")
+df = pd.DataFrame({'Specialisation-Phase': spec_and_phase_tokens, 'Frequency': spec_and_phase_frequency})
+sorted_df = df.sort_values('Frequency', ascending=False)
+sorted_df.to_csv(output_csv_path1, index=False)
+
+# now generate a 2d array csv
+print("Write to nested dictionary object")
+data_for_plotting = {}
+
+# read the CSV file using pandas
+df = pd.read_csv(output_csv_path1)
+
+# iterate over each row in the dataframe
+for index, row in df.iterrows():
+    values = row['Specialisation-Phase'].split(':')
+    spec = values[0]
+    phase = values[1]
+    frequency = int(row['Frequency'])
+
+    if spec not in data_for_plotting:
+        data_for_plotting[spec] = {}
+
+    data_for_plotting[spec][phase] = frequency
+
+def sort_dict(dictionary):
+    if isinstance(dictionary, dict):
+        sorted_dict = {}
+        for key in sorted(dictionary.keys()):
+            sorted_dict[key] = sort_dict(dictionary[key])
+        return sorted_dict
+    else:
+        return dictionary
+
+data_for_plotting = sort_dict(data_for_plotting)
+
+with open(output_json_path1, 'w') as json_file:
+    json.dump(data_for_plotting, json_file, indent=4)
