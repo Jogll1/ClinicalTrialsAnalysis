@@ -10,7 +10,7 @@ import json
 
 # paths
 input_path = 'Data/CTG csv/ctg-studies(dates).csv'
-map_cond_path = 'mapped_conditions.txt'
+map_cond_path = 'Data/Stage 2/mapped_conditions.txt'
 output_txt_path1 = 'Data/Stage 3/condition_with_year.txt'
 output_txt_path2 = 'Data/Stage 3/spec_with_year.txt'
 output_csv_path1 = 'Data/Stage 3/spec_year_frequencies.csv'
