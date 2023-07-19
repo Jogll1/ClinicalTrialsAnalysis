@@ -49,11 +49,12 @@ def plot_specialisation(spec):
         print('Invalid key')
 
 # plotting the data
-plot_specialisation('oncology')
+plot_specialisation('ophthalmology')
 plot_specialisation('hematology')
 plot_specialisation('neurology')
 plot_specialisation('gastroenterology')
 plot_specialisation('infectious disea')
+plot_specialisation('ophthalmology')
 
 # generate list of all keys
 # test_list = ['oncology', 'hematology', 'neurology', 'gastroenterology', 'infectious disea']
@@ -67,5 +68,5 @@ plt.ylabel('Frequency')
 plt.title('Frequency of Specialisations by Phase')
 
 # show graph
-# plt.legend(loc='upper left')
+plt.legend(loc='upper left')
 plt.show()

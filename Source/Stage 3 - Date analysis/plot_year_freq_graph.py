@@ -54,7 +54,7 @@ plot_specialisation('cardiology')
 plot_specialisation('psychiatry')
 plot_specialisation('neurology')
 plot_specialisation('endocrinology')
-plot_specialisation('infectious disea')
+plot_specialisation('ophthalmology')
 
 # generate list of all keys
 # test_list = ['oncology', 'cardiology', 'psychiatry', 'neurology', 'endocrinology', 'infectious disea']
@@ -71,5 +71,5 @@ plt.title('Frequency of Specialisations by Year')
 plt.xticks(np.arange(year_start, year_end, 5))
 
 # show graph
-# plt.legend(loc='upper left')
+plt.legend(loc='upper left')
 plt.show()
