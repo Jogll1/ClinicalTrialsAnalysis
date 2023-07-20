@@ -5,7 +5,8 @@ import json
 # in form of adding a 1 to the specialisation column
 
 group_spec_path = 'Data/Stage 7/grouped_spec.json'
-map_cond_path = 'Data/Stage 2/mapped_conditions.txt'
+# map_cond_path = 'Data/Stage 2/mapped_conditions.txt'
+map_cond_path = 'Data/Stage 2/mapped_conditions2.txt'
 input_path = 'Data/CTG csv/ctg-studies(all).csv'
 output_path = 'Data/Stage 7/ctg-with-spec.csv'
 
