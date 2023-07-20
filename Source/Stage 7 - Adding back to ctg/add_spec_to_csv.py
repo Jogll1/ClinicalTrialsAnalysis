@@ -33,22 +33,53 @@ specialisations_list = list(data.keys())
 # get copy of csv
 copy_df = df.copy()
 
+# create number of locations column
+copy_df['No. of locations'] = 1
 # add new column for each speciality to copy of csv
-for i in range(0, len(specialisations_list)):
-    column_title = specialisations_list[i]
-    copy_df[column_title] = ''
+for column_name in specialisations_list:
+    copy_df[column_name] = 0
+
+# setting value at row, column
+# columns_list = copy_df.columns.tolist()
+# print(columns_list)
+# copy_df.iat[0, df.columns.get_loc(columns_list[0])] = 70
+# print(copy_df[columns_list[0]][0])
 
 # go through each trial and check which conditions it contains
 for i in range(0, len(conditions_list)):
     print("trial " + str(i))
     conditions = conditions_list[i].split("|")
+    # print(conditions)
+    specs = []
     for j in conditions:
-        spec = ''
         # map the conditions from mapped_conditions
         if j.lower().strip() in mapped_cond:
-            spec = mapped_spec[mapped_cond.index(j.lower().strip())]            
-            print(spec)
+            specs.append(mapped_spec[mapped_cond.index(j.lower().strip())])
+            continue
+        else:
+            for k in range(0, len(mapped_spec)):
+                if str(j.lower()).strip() in mapped_spec[k].lower().strip() or mapped_spec[k].lower().strip() in str(j.lower()).strip():
+                    specs.append(mapped_spec[k].lower().strip())
+                    break
         # remap the conditions from json
+        for spec in specs:
+            for k in range(0, len(specialisations_list)):
+                if spec in data[specialisations_list[k]]:
+                    specs[specs.index(spec)] = specialisations_list[k]
+                    break
+    # increment the value in the column of the dataframe
+    for m in range(0, len(specs)):
+        if specs[m] in specialisations_list:
+            # change row, column value to a 1 if its not already
+            col = specialisations_list[specialisations_list.index(specs[m])]
+            if copy_df.iat[i, copy_df.columns.get_loc(col)] == 0:
+                copy_df.iat[i, copy_df.columns.get_loc(col)] = 1
+    # print(copy_df.loc[i].values)
+
+    # get amount of locations
+    locations = copy_df.iat[i, copy_df.columns.get_loc("Locations")]
+    locations =  locations.split("|") if str(locations) != "nan" else ['1']
+    copy_df.iat[i, copy_df.columns.get_loc("No. of locations")] = len(locations)
 
 # write the copy df to a csv file
-# copy_df.to_csv(output_path, index=False)
+copy_df.to_csv(output_path, index=False)
