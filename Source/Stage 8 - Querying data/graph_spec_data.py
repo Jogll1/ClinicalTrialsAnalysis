@@ -75,7 +75,7 @@ def plot_spec_data(spec):
                                     phase_2_values[(int(check_values[0]) - year_start) * 12 + int(check_values[1]) - 2] += 1
                                 elif phases[j] == "PHASE3":
                                     phase_3_values[(int(check_values[0]) - year_start) * 12 + int(check_values[1]) - 2] += 1
-                                elif phases[j] == "PHASE$":
+                                elif phases[j] == "PHASE4":
                                     phase_4_values[(int(check_values[0]) - year_start) * 12 + int(check_values[1]) - 2] += 1
 
                         # increment check date
@@ -101,6 +101,12 @@ def plot_spec_data(spec):
         ax2.bar(x, phase_2_values, label='Phase 2', bottom=np.add(early_1_values, phase_1_values), alpha=0.4)
         ax2.bar(x, phase_3_values, label='Phase 3', bottom=np.add(np.add(early_1_values, phase_1_values), phase_2_values), alpha=0.4)
         ax2.bar(x, phase_4_values, label='Phase 4', bottom=np.add(np.add(np.add(early_1_values, phase_1_values), phase_2_values), phase_3_values), alpha=0.4)
+    
+        # set the y-axis limits for both axes to be the same
+        y_max = max(np.add(np.add(np.add(early_1_values, phase_1_values), phase_2_values), phase_3_values).max(), y.max())
+        y_min = min(np.add(np.add(np.add(early_1_values, phase_1_values), phase_2_values), phase_3_values).min(), y.min())
+        ax1.set_ylim(y_min, y_max)
+        ax2.set_ylim(y_min, y_max)
     else:
         print("Invalid specialisation")
 
@@ -113,7 +119,7 @@ plt.ylabel('No. of trials active')
 plt.xticks(np.arange(year_start, year_end, 5))
 
 # show the plot
-ax1.legend(loc='upper left')
-ax2.legend(loc='upper right')
-plt.tight_layout()
+ax1.legend(loc='upper right')
+ax2.legend(loc='upper left')
+# plt.tight_layout()
 plt.show()
