@@ -1,8 +1,6 @@
 import tkinter as tk
-from tkinter import filedialog
 from tkinter import ttk
 import pandas as pd
-import re
 from datetime import datetime
 
 data_path = 'Data/Stage 7/ctg-with-spec.csv'

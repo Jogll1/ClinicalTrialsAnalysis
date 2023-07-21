@@ -1,8 +1,9 @@
 import pandas as pd
 import json
 
-# script to add the specialisation to a trial
-# in form of adding a 1 to the specialisation column
+# script to add the specialisation to a trial by adding an extra column for each specialisation
+# in form of adding a 1 to the specialisation column if a condition in the trial matches with one of the specilialisations
+# also added no. of locatiosn columns
 
 group_spec_path = 'Data/Stage 7/grouped_spec.json'
 # map_cond_path = 'Data/Stage 2/mapped_conditions.txt'
@@ -39,12 +40,6 @@ copy_df['No. of locations'] = 1
 # add new column for each speciality to copy of csv
 for column_name in specialisations_list:
     copy_df[column_name] = 0
-
-# setting value at row, column
-# columns_list = copy_df.columns.tolist()
-# print(columns_list)
-# copy_df.iat[0, df.columns.get_loc(columns_list[0])] = 70
-# print(copy_df[columns_list[0]][0])
 
 # go through each trial and check which conditions it contains
 for i in range(0, len(conditions_list)):
