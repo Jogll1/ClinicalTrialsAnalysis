@@ -26,30 +26,47 @@ import numpy as np
 # # Show the figures
 # plt.show()
 
-# Sample data
+# Sample data for the line graph
+x_line = np.linspace(0, 10, 100)
+y_line = np.sin(x_line)
+
+# Sample data for the stacked bar graph
 categories = ['Category A', 'Category B', 'Category C']
 data1 = [20, 30, 40]
 data2 = [10, 25, 35]
 data3 = [5, 15, 25]
 
 # Create an array of positions for the bars
-x = np.arange(len(categories))
+x_bar = np.arange(len(categories))
 
-# Plot the first set of bars
-plt.bar(x, data1, label='Data 1')
+# Create the figure and the primary axis for the line graph
+fig, ax1 = plt.subplots()
 
-# Plot the second set of bars on top of the first set
-plt.bar(x, data2, bottom=data1, label='Data 2')
+# Plot the line graph on the primary axis
+ax1.plot(x_line, y_line, label='Line Graph', color='blue')
+ax1.set_xlabel('X-axis')
+ax1.set_ylabel('Line Graph', color='blue')
+ax1.tick_params(axis='y', labelcolor='blue')
 
-# Plot the third set of bars on top of the previous two
-plt.bar(x, data3, bottom=np.add(data1, data2), label='Data 3')
+# Create a secondary axis for the stacked bar graph
+ax2 = ax1.twinx()
+
+# Plot the stacked bar graph on the secondary axis
+ax2.bar(x_bar, data1, label='Data 1', alpha=0.7)
+ax2.bar(x_bar, data2, label='Data 2', bottom=data1, alpha=0.7)
+ax2.bar(x_bar, data3, label='Data 3', bottom=np.add(data1, data2), alpha=0.7)
+ax2.set_ylabel('Stacked Bar Graph')
 
 # Add labels and title
-plt.xlabel('Categories')
-plt.ylabel('Values')
-plt.title('Stacked Bar Chart')
-plt.xticks(x, categories)
-plt.legend()
+plt.xticks(x_bar, categories)
+plt.title('Line and Stacked Bar Graphs')
+
+# Show the legend for both graphs
+ax1.legend(loc='upper left')
+ax2.legend(loc='upper right')
+
+# Adjust layout to prevent overlapping
+plt.tight_layout()
 
 # Show the plot
 plt.show()
